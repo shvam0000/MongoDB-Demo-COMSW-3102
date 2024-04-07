@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
 dotenv.config();
 
 const noteRoutes = require('./routes/note.js');

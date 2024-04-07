@@ -4,7 +4,6 @@
   "main": "index.js",
   "author": "Shivam Shekhar",
   "license": "MIT",
-  "type": "module",
   "scripts": {
     "start": "nodemon app.js"
   },

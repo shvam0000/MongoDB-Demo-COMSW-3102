@@ -1,5 +1,5 @@
-import express from 'express';
-import mongoose from 'mongoose';
+const express = require('express');
+const mongoose = require('mongoose');
 const Note = require('../models/note.js');
 
 const router = express.Router();
@@ -28,11 +28,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:id', getNote, (req, res) => {
+router.get('/:id', (req, res) => {
   res.json(res.note);
 });
 
-router.patch('/:id', getNote, async (req, res) => {
+router.patch('/:id', async (req, res) => {
   if (req.body.title != null) {
     res.note.title = req.body.title;
   }
@@ -48,7 +48,7 @@ router.patch('/:id', getNote, async (req, res) => {
   }
 });
 
-router.delete('/:id', getNote, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     await res.note.remove();
     res.json({ message: 'Note deleted' });
