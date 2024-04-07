@@ -4,57 +4,87 @@ const Note = require('../models/note.js');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const notes = await Note.find();
-    res.json(notes);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+router.get('/', (req, res) => {
+  Note.find()
+    .exec()
+    .then((result) => {
+      console.log(res);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const note = new Note({
     _id: new mongoose.Types.ObjectId(),
     title: req.body.title,
     content: req.body.content,
   });
+  note
+    .save()
+    .then((result) => {
+      console.log(result);
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 
-  try {
-    const newNote = await note.save();
-    res.status(201).json(newNote);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+router.patch('/:id', (req, res) => {
+  const id = req.params.id;
+  Note.updateOne({ _id: id }, { $set: req.body })
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
+
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  Note.deleteOne({ _id: id })
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
 });
 
 router.get('/:id', (req, res) => {
-  res.json(res.note);
-});
-
-router.patch('/:id', async (req, res) => {
-  if (req.body.title != null) {
-    res.note.title = req.body.title;
-  }
-  if (req.body.content != null) {
-    res.note.content = req.body.content;
-  }
-
-  try {
-    const updatedNote = await res.note.save();
-    res.json(updatedNote);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-router.delete('/:id', async (req, res) => {
-  try {
-    await res.note.remove();
-    res.json({ message: 'Note deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  const id = req.params.id;
+  Note.findById(id)
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
 });
 
 module.exports = router;
